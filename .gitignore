@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+*.egg-info/
+
+# NiceGUI's own storage folder
+.nicegui/
+
+# Your local recipe database - private data, never commit it
+data/*.db
+*.db
+*.sqlite3
+
+# Secrets / editor / OS clutter
+.env
+.vscode/
+.idea/
+.DS_Store
