@@ -6,7 +6,7 @@ Built with Python + [NiceGUI](https://nicegui.io). Speech uses the browser's
 built-in speech tools (no paid API).
 
 ## Deploy your own copy (free, one click)
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/YOUR-USERNAME/YOUR-REPO)
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/drishti200301/recipe-notebook)
 
 1. Click the button above and sign in to Render with GitHub.
 2. Confirm the settings and click **Apply** / **Create**.
