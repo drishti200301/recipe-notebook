@@ -5,14 +5,6 @@ the pages, and start the web server.
 """
 import os
 
-# Read settings (like the optional API key) from a file named ".env" if present.
-# The try/except keeps the app working even if python-dotenv isn't installed.
-try:
-    from dotenv import load_dotenv
-    load_dotenv()
-except ImportError:
-    pass
-
 from nicegui import app, ui
 
 from recipe_notebook import config, database
@@ -22,6 +14,13 @@ from recipe_notebook.pages import folders, home, recipe  # noqa: F401
 
 database.init_db()
 app.add_static_files(config.ASSETS_URL, str(config.ASSETS_DIR))
+
+ui.add_head_html(
+    '<meta name="description" content="A voice-controlled recipe notebook - '
+    'talk while you cook and it files your recipe for you. Each copy is '
+    'private: nothing you say is ever sent anywhere or seen by anyone else.">',
+    shared=True,
+)
 
 # `__mp_main__` is needed because NiceGUI can re-run this file internally.
 if __name__ in {"__main__", "__mp_main__"}:

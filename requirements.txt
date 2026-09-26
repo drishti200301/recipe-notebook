@@ -1,3 +1,1 @@
 nicegui>=3.0,<4
-anthropic>=0.50
-python-dotenv>=1.0

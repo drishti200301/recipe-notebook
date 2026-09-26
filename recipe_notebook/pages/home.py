@@ -9,7 +9,7 @@ permission alive, so the recipe can be read aloud automatically.
 """
 from nicegui import ui
 
-from .. import config, database, speech, tidy
+from .. import config, database, speech
 from ..summary import summarize
 from ..ui_components import (header_banner, image_button, page_frame,
                              set_background, show_image)
@@ -30,7 +30,7 @@ def home_page():
 
     # Per-visitor state. A plain dict keeps things simple to read.
     state = {"view": "idle", "heard": "", "status": "", "counts": "", "recipe": None,
-             "summary": "", "ai_used": False}
+             "summary": ""}
     session = VoiceSession()
 
     # ---------- what happens when the browser sends us a sentence ---------
@@ -71,7 +71,7 @@ def home_page():
                       "Use Chrome on Android, or Chrome on a laptop.", type="negative")
             return
         session.reset()                        # start a fresh, empty session
-        state.update(view="listening", heard="", summary="", ai_used=False,
+        state.update(view="listening", heard="", summary="",
                      counts="Recipe: —  |  0 ingredients  |  0 steps",
                      status=MODE_LABELS["idle"])
         speech.start_listening()               # the first tap = the permission moment
@@ -91,21 +91,6 @@ def home_page():
             state["view"] = "idle"
             body.refresh()
             return
-
-        # Optional: let an AI model clean up mishearings (needs ANTHROPIC_API_KEY).
-        if tidy.is_enabled():
-            state["view"] = "tidying"
-            body.refresh()
-            result = await tidy.tidy_recipe(d.name, d.ingredients, d.steps, d.transcript)
-            if result:
-                d.name = result["name"] or d.name
-                d.ingredients = result["ingredients"] or d.ingredients
-                d.steps = result["steps"] or d.steps
-                state["summary"] = result["summary"]
-                state["ai_used"] = True
-            else:
-                ui.notify("AI clean-up wasn't available - using the basic sorting.",
-                          type="warning")
 
         if not state["summary"]:                # offline / fallback summary
             state["summary"] = summarize(d.name or "This recipe", d.ingredients, d.steps)
@@ -151,6 +136,8 @@ def home_page():
                 ui.label("Tap once, then just talk. Say “done” when finished.").classes("text-center")
             ui.button("My Folders", icon="folder",
                       on_click=lambda: ui.navigate.to("/folders")).props("rounded size=lg")
+            ui.label("🔒 Your recipes stay only in this copy of the app - nobody else can see them."
+                     ).classes("text-caption text-center q-mt-sm").style("opacity:0.75")
 
         elif view == "listening":
             with ui.column().classes("panel w-full items-center"):
@@ -163,19 +150,12 @@ def home_page():
                                           ).classes("text-caption text-center")
                 image_button(config.IMG_STOP, "Stop", stop_manually, 150)
 
-        elif view == "tidying":
-            with ui.column().classes("panel w-full items-center"):
-                ui.spinner("dots", size="xl")
-                ui.label("Tidying up your recipe...").classes("text-h6")
-
         elif view == "filing":
             d = session.draft
             with ui.column().classes("panel w-full items-center"):
                 ui.label("Check your recipe").classes("text-h5 text-bold")
-                note = ("I cleaned this up with AI. Items marked (?) were unclear - please check them."
-                        if state["ai_used"] else
-                        "I sorted what you said. Fix anything - one item per line.")
-                ui.label(note).classes("text-caption text-center")
+                ui.label("I sorted what you said. Fix anything - one item per line."
+                         ).classes("text-caption text-center")
                 recipe_name = ui.input("Recipe name", value=d.name).classes("w-full")
                 summary_box = ui.textarea("Summary", value=state["summary"]).classes("w-full")
                 ing_box = ui.textarea("Ingredients (one per line)",

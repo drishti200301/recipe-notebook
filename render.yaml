@@ -1,0 +1,12 @@
+# Render "Blueprint": tells Render how to build and run this app, so anyone
+# who clicks the Deploy button gets a ready-made copy with no manual setup.
+services:
+  - type: web
+    name: recipe-notebook
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python main.py
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.8

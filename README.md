@@ -5,6 +5,17 @@ say "done" - the app files your recipe into a folder and reads it back.
 Built with Python + [NiceGUI](https://nicegui.io). Speech uses the browser's
 built-in speech tools (no paid API).
 
+## Deploy your own copy (free, one click)
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/YOUR-USERNAME/YOUR-REPO)
+
+1. Click the button above and sign in to Render with GitHub.
+2. Confirm the settings and click **Apply** / **Create**.
+3. After a few minutes you get your own link, e.g. `https://recipe-notebook-xxxx.onrender.com`.
+
+Your copy is separate from everyone else's. Note: on Render's free plan a copy
+sleeps when idle (about 50 seconds to wake) and its saved recipes are erased
+when it restarts.
+
 ## Run it locally
 ```bash
 python -m venv .venv
@@ -22,26 +33,17 @@ Open http://localhost:8080 in **Chrome**.
 | "cooking now" / "beginning" / "let's start" / "let's cook" / "cooking start" | each sentence becomes a numbered step |
 | "done" / "over" (as its own sentence) | stops and saves |
 
-## Optional: AI clean-up (better ingredients, steps and summary)
-Speech recognition mishears words. If you add an Anthropic API key, the app
-sends your transcript to Claude, which fixes mishearings from context, writes
-clean ingredients/steps and a plain-English summary. Unclear words get a "(?)"
-so you can check them. **Without a key everything still works** using simple
-rule-based sorting.
-
-1. Create a key at https://console.anthropic.com (API billing is separate from a claude.ai subscription).
-2. Copy `.env.example` to `.env` and paste the key after `ANTHROPIC_API_KEY=`.
-3. Restart the app. `.env` is git-ignored, so the key is never uploaded.
-   (On Render, add `ANTHROPIC_API_KEY` under Environment instead.)
-
-Privacy: with a key set, your spoken recipe text is sent to Anthropic's API.
-
 ## Your data is yours
+Nothing you say is sent anywhere. Recipe sorting happens with plain Python,
+locally, in your own copy of the app - no outside AI service is used, no
+audio or transcript ever leaves your deployment.
+
 Recipes and folders live in a SQLite file (`data/recipes.db`) that is
 **never committed to git** (see `.gitignore`). If someone clones this repo and
 deploys their own copy, they get a **fresh, empty notebook** - each
 deployment has its own separate database, and cloning the code gives no access
-to anyone else's saved recipes.
+to anyone else's saved recipes. Nobody, including the person who wrote this
+app, can see what you record.
 
 ## Customising the art
 Images live in `assets/images/`, fonts in `assets/fonts/`. Every filename is a

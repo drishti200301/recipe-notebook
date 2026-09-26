@@ -45,10 +45,6 @@ IMG_RECIPE_CARD_BG = "recipe-card-bg.png"  # not supplied yet -> placeholder col
 # your uploaded files are named option_N_folder-icon.png, so I matched those.)
 FOLDER_ICON_GLOB = "option_*_folder-icon.png"
 
-# ---------- Optional AI tidy-up -------------------------------------------
-# Used only if the ANTHROPIC_API_KEY environment variable is set (see README).
-AI_MODEL = "claude-haiku-4-5-20251001"   # small, fast, cheap
-
 # ---------- Font -----------------------------------------------------------
 # Put your font file in assets/fonts/ and set the filename here, e.g.
 # "MyHandwriting.ttf". While this is None, a fallback font is used.
